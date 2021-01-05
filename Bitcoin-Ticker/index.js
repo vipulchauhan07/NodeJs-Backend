@@ -10,13 +10,19 @@ app.get("/", function (req, res) {
     res.sendFile(__dirname + "/index.html");
 });
 
-var url = "https://apiv2.bitcoinaverage.com/indices/global/ticker/BTCUSD";
-
 app.post("/", function (req, res) {
+    
+    const crypto = req.body.crypto;
+    const fiat = req.body.fiat;
+
+    var url = "https://apiv2.bitcoinaverage.com/indices/global/ticker/" + crypto + fiat;
 
     request(url, function(error, response, body) {
             var data = JSON.parse(body);
-            var price = 
+            var price = data.last;
+            res.write(new Date());
+            res.write('<h1>' +'The current price of' + crypto + "is" + price + '</h1>' + fiat);
+            res.send();
     });
 });
 
